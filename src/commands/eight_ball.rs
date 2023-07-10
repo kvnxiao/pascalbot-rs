@@ -9,7 +9,7 @@ use twilight_model::{
 };
 use twilight_util::builder::InteractionResponseDataBuilder;
 
-/// Ask the magic 8-ball a question.
+/// Ask the magic 8-ball a question
 #[derive(CommandModel, CreateCommand, Debug)]
 #[command(name = "8ball")]
 pub struct EightballCommand {

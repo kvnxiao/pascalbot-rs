@@ -13,7 +13,7 @@ use twilight_util::builder::InteractionResponseDataBuilder;
 #[derive(CommandModel, CreateCommand, Debug)]
 #[command(name = "roll")]
 pub struct RollCommand {
-    /// Max number to roll (inclusive)
+    /// Max number to roll up to (inclusive)
     #[command(min_value = 0)]
     pub max: Option<i64>,
 }
