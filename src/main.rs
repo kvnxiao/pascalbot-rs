@@ -6,6 +6,7 @@ use crate::{
     process::process_interactions,
 };
 use anyhow::Context;
+use commands::eval::EvalCommand;
 use futures_util::StreamExt;
 use std::{env, sync::Arc};
 use twilight_gateway::{
@@ -31,9 +32,10 @@ async fn main() -> anyhow::Result<()> {
 
     // Register global commands.
     let commands = [
-        XkcdCommand::create_command().into(),
         EightballCommand::create_command().into(),
+        EvalCommand::create_command().into(),
         RollCommand::create_command().into(),
+        XkcdCommand::create_command().into(),
     ];
 
     let application = client.current_user_application().await?.model().await?;
