@@ -1,3 +1,4 @@
+use crate::api::xkcd::XkcdComic;
 use anyhow::Context;
 use twilight_http::Client;
 use twilight_interactions::command::{CommandModel, CreateCommand};
@@ -10,8 +11,6 @@ use twilight_util::builder::{
     embed::{EmbedBuilder, ImageSource},
     InteractionResponseDataBuilder,
 };
-
-use crate::api::xkcd::XkcdComic;
 
 /// Explore xkcd comics
 #[derive(CommandModel, CreateCommand, Debug)]

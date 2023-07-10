@@ -1,4 +1,4 @@
-use crate::commands::xkcd::XkcdCommand;
+use crate::commands::{eight_ball::EightballCommand, xkcd::XkcdCommand};
 use anyhow::bail;
 use std::{mem, sync::Arc};
 use twilight_gateway::Event;
@@ -38,6 +38,7 @@ async fn handle_command(
 ) -> anyhow::Result<()> {
     match &*data.name {
         "xkcd" => XkcdCommand::handle(interaction, data, client).await,
+        "8ball" => EightballCommand::handle(interaction, data, client).await,
         name => bail!("unknown command: {}", name),
     }
 }

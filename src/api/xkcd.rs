@@ -19,6 +19,8 @@ pub struct XkcdComic {
     pub image_url: String,
 }
 
+const XKCD_API_LATEST_URL: &str = "https://xkcd.com/info.0.json";
+
 impl XkcdComic {
     /// Get a specific xkcd comic by number.
     pub async fn get_number(number: u32) -> anyhow::Result<Option<XkcdComic>> {
@@ -36,13 +38,13 @@ impl XkcdComic {
 
     /// Get the latest xkcd comic.
     pub async fn get_latest() -> anyhow::Result<XkcdComic> {
-        let response = reqwest::get("https://xkcd.com/info.0.json").await?;
+        let response = reqwest::get(XKCD_API_LATEST_URL).await?;
 
         Ok(response.error_for_status()?.json().await?)
     }
 
     pub async fn get_random() -> anyhow::Result<XkcdComic> {
-        let latest_response = reqwest::get("https://xkcd.com/info.0.json").await?;
+        let latest_response = reqwest::get(XKCD_API_LATEST_URL).await?;
 
         let latest_number = latest_response
             .error_for_status()?

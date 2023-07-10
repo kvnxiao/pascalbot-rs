@@ -18,3 +18,4 @@ twilight-http = "0.15"
 twilight-interactions = "0.15"
 twilight-model = "0.15"
 twilight-util = { version = "0.15", features = ["builder"] }
+twilight-mention = "0.15"

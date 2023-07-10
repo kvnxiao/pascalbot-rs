@@ -1,7 +1,10 @@
 mod api;
 pub mod commands;
 mod process;
-use crate::{commands::xkcd::XkcdCommand, process::process_interactions};
+use crate::{
+    commands::{eight_ball::EightballCommand, xkcd::XkcdCommand},
+    process::process_interactions,
+};
 use anyhow::Context;
 use futures_util::StreamExt;
 use std::{env, sync::Arc};
@@ -28,7 +31,11 @@ async fn main() -> anyhow::Result<()> {
     let config = Config::builder(token.clone(), Intents::empty()).build();
 
     // Register global commands.
-    let commands = [XkcdCommand::create_command().into()];
+    let commands = [
+        XkcdCommand::create_command().into(),
+        EightballCommand::create_command().into(),
+    ];
+
     let application = client.current_user_application().await?.model().await?;
     let interaction_client = client.interaction(application.id);
 
