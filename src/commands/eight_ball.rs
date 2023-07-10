@@ -14,7 +14,7 @@ use twilight_util::builder::InteractionResponseDataBuilder;
 #[command(name = "8ball")]
 pub struct EightballCommand {
     /// Question to ask the almighty eight ball
-    question: String,
+    pub question: String,
 }
 
 impl EightballCommand {

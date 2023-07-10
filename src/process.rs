@@ -1,4 +1,4 @@
-use crate::commands::{eight_ball::EightballCommand, xkcd::XkcdCommand};
+use crate::commands::{eight_ball::EightballCommand, roll::RollCommand, xkcd::XkcdCommand};
 use anyhow::bail;
 use std::{mem, sync::Arc};
 use twilight_gateway::Event;
@@ -36,7 +36,9 @@ async fn handle_command(
     data: CommandData,
     client: &Client,
 ) -> anyhow::Result<()> {
+    tracing::info!(command = ?data.name, "handling command");
     match &*data.name {
+        "roll" => RollCommand::handle(interaction, data, client).await,
         "xkcd" => XkcdCommand::handle(interaction, data, client).await,
         "8ball" => EightballCommand::handle(interaction, data, client).await,
         name => bail!("unknown command: {}", name),
