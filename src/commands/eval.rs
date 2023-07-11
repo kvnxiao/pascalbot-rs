@@ -26,12 +26,14 @@ impl EvalCommand {
         let command =
             EvalCommand::from_interaction(data.into()).context("failed to parse command data")?;
 
-        let evaluation = evaluate_expression(&command.expression)?;
+        let evaluation = evaluate_expression(&command.expression);
+        let message = if evaluation.is_error {
+            format!("{}\n\n_**{}**_", evaluation.expression, evaluation.result)
+        } else {
+            format!("{}\n\n**= {}**", evaluation.expression, evaluation.result)
+        };
         let data = InteractionResponseDataBuilder::new()
-            .content(format!(
-                "{}\n\n**= {}**",
-                evaluation.expression, evaluation.result
-            ))
+            .content(message)
             .build();
         let client = client.interaction(interaction.application_id);
         let response = InteractionResponse {

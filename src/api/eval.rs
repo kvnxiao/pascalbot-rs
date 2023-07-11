@@ -1,3 +1,5 @@
+use anyhow::anyhow;
+use anyhow::Context;
 use kalk::parser;
 
 // Use double-precision floating-point format
@@ -10,31 +12,30 @@ const DISCORD_COMMAND_SEPARATOR: &str = ";";
 pub struct Evaluation {
     pub expression: String,
     pub result: String,
+    pub is_error: bool,
 }
 
-fn evaluate_expression_lines(expression_lines: &[&str]) -> String {
+fn evaluate_expression_lines(expression_lines: &[&str]) -> anyhow::Result<String> {
     let mut parser_context = parser::Context::new();
 
     if let Some((last, lines)) = expression_lines.split_last() {
         for line in lines {
-            let result = parser::eval(&mut parser_context, line, PRECISION);
-            match result {
+            match parser::eval(&mut parser_context, line, PRECISION) {
                 Ok(_) => {}
-                Err(err) => return err.to_string(),
+                Err(err) => return Err(anyhow!(err.to_string())),
             }
         }
-        let final_result = parser::eval(&mut parser_context, last, PRECISION);
-        return match final_result {
-            Ok(res) => res.map(|r| r.to_string_pretty()).unwrap_or_else(|| {
-                "The expression was incomplete and did not evaluate to a value.".into()
-            }),
-            Err(err) => err.to_string(),
+        return match parser::eval(&mut parser_context, last, PRECISION) {
+            Ok(res) => res
+                .map(|r| r.to_string_pretty())
+                .context("The expression was incomplete and did not evaluate to a value."),
+            Err(err) => Err(anyhow!(err.to_string())),
         };
     };
-    "The expression was empty.".into()
+    Err(anyhow!("The expression was empty."))
 }
 
-pub fn evaluate_expression(expression: &str) -> anyhow::Result<Evaluation> {
+pub fn evaluate_expression(expression: &str) -> Evaluation {
     let expression_lines = expression
         .split(DISCORD_COMMAND_SEPARATOR)
         .map(|expr| expr.trim())
@@ -42,8 +43,16 @@ pub fn evaluate_expression(expression: &str) -> anyhow::Result<Evaluation> {
     let expression_string = expression_lines.join("\n");
     let evaluation_result = evaluate_expression_lines(&expression_lines);
 
-    Ok(Evaluation {
-        expression: expression_string,
-        result: evaluation_result,
-    })
+    match evaluation_result {
+        Ok(res) => Evaluation {
+            expression: expression_string,
+            result: res,
+            is_error: false,
+        },
+        Err(err) => Evaluation {
+            expression: expression_string,
+            result: err.to_string(),
+            is_error: true,
+        },
+    }
 }
