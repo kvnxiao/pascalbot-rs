@@ -21,4 +21,4 @@ twilight-util = { version = "0.15", features = ["builder"] }
 twilight-mention = "0.15"
 
 # Calculator support
-kalk = "3"
+kalk = { git = "https://github.com/kvnxiao/kalker", branch = "prevent-stack-overflow" }
