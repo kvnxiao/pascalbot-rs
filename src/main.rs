@@ -1,12 +1,15 @@
 mod api;
-pub mod commands;
+mod commands;
 mod process;
+
 use crate::{
-    commands::{eight_ball::EightballCommand, roll::RollCommand, xkcd::XkcdCommand},
+    commands::{
+        eight_ball::EightballCommand, eval::EvalCommand, roll::RollCommand,
+        version::VersionCommand, xkcd::XkcdCommand,
+    },
     process::process_interactions,
 };
 use anyhow::Context;
-use commands::eval::EvalCommand;
 use futures_util::StreamExt;
 use std::{env, sync::Arc};
 use twilight_gateway::{
@@ -35,6 +38,7 @@ async fn main() -> anyhow::Result<()> {
         EightballCommand::create_command().into(),
         EvalCommand::create_command().into(),
         RollCommand::create_command().into(),
+        VersionCommand::create_command().into(),
         XkcdCommand::create_command().into(),
     ];
 
