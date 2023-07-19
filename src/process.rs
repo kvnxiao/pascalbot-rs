@@ -1,5 +1,6 @@
 use crate::commands::{
-    eight_ball::EightballCommand, eval::EvalCommand, roll::RollCommand, xkcd::XkcdCommand,
+    eight_ball::EightballCommand, eval::EvalCommand, roll::RollCommand, version::VersionCommand,
+    xkcd::XkcdCommand,
 };
 use anyhow::bail;
 use std::{mem, sync::Arc};
@@ -43,6 +44,7 @@ async fn handle_command(
         "8ball" => EightballCommand::handle(interaction, data, client).await,
         "eval" => EvalCommand::handle(interaction, data, client).await,
         "roll" => RollCommand::handle(interaction, data, client).await,
+        "version" => VersionCommand::handle(interaction, data, client).await,
         "xkcd" => XkcdCommand::handle(interaction, data, client).await,
         name => bail!("unknown command: {}", name),
     }
