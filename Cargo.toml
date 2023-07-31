@@ -23,7 +23,7 @@ twilight-util = { version = "0.15", features = ["builder"] }
 twilight-mention = "0.15"
 
 # Calculator support
-kalk = { git = "https://github.com/PaddiM8/kalker" }
+kalk = "3"
 
 [build-dependencies]
 vergen = { version = "8", features = ["build", "git", "gitcl"] }
